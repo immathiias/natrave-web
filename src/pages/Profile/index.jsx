@@ -105,7 +105,7 @@ export const Profile = () => {
                 awayTeam={game.awayTeam}
                 group={game.grp}
                 rod={game.rod}
-                btn={false}
+                btn={undefined}
                 date={format(new Date(game.gameTime), "d 'de' MMMM", { locale: ptBR })}
                 gameTime={format(new Date(game.gameTime), 'HH:mm')}
                 homeTeamScore={user?.hunches?.[game.id]?.homeTeamScore == undefined ? '' : user?.hunches?.[game.id]?.homeTeamScore}

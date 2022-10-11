@@ -3,7 +3,6 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useLocalStorage } from 'react-use'
 import innerText from 'react-innertext';
-import { Icon } from '~/components'
 
 const validationSchema = yup.object().shape({
   homeTeamScore: yup.string().required(),
@@ -47,15 +46,16 @@ export const Card = ({ disabled, gameId, homeTeam, awayTeam, homeTeamScore, away
 
   })
 
+
   return (
     <div className="rounded-xl border border-grey-300 p-4 text-center space-y-3">
 
       <div className='grid'>
         {rod <= 3 ? <span className="text-sm md:text-base text-red-500 font-bold select-none uppercase">Grupo {group}</span>
           : ''}
-        <span className="text-sm md:text-base text-grey-700 font-bold select-none">{date} ás {gameTime}</span>
-
+        <span className="text-sm md:text-base text-red-700 font-bold select-none">{date} ás {gameTime}</span>
       </div>
+
       <form
         onSubmit={formik.handleSubmit}
         className="flex flex-col space-y-4 space-x-2 mx:space-x-4 justify-center items-center">
@@ -90,11 +90,15 @@ export const Card = ({ disabled, gameId, homeTeam, awayTeam, homeTeamScore, away
           <span className="text-sm sm:text-md font-bold uppercase">{awayTeam}</span>
         </div>
 
-        {btn == true ? <button type="submit" id={`btnClick${gameId}`}
-          className="bg-red-500 text-white text-center font-bold px-4 py-1 rounded border-2 border-red-500 uppercase
-          hover:bg-red-700 ease-in duration-200" disabled={formik.isSubmitting} >
+        {btn == true ?
+          <button type="submit" id={`btnClick${gameId}`}
+            className="bg-red-500 text-white text-center font-bold px-4 py-1 rounded border-2 border-red-500 uppercase 
+            disabled:opacity-50
+            hover:bg-red-700 ease-in duration-200" disabled={!formik.isValid} >
+            {formik.handleChange && formik.isValid ? 'salvar palpite' : 'faça um palpite'}
+          </button>
 
-          {formik.isSubmitting ? <Icon name="spinner" /> : "salvar palpite"}</button> : ''}
+          : ''}
       </form>
 
     </div >

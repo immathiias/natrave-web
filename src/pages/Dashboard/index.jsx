@@ -11,6 +11,7 @@ export const Dashboard = () => {
   const [currentRound, setRound] = useState('1')
   const [auth] = useLocalStorage('auth', {})
 
+
   const [{ value: user, loading, error }, fetchHunches] = useAsyncFn(async () => {
     const res = await axios({
       method: 'get',
@@ -55,6 +56,7 @@ export const Dashboard = () => {
   if (!auth?.user?.id) {
     return <Navigate to="/" replace={true} />
   }
+
 
   return (
     <>
