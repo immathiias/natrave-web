@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAsyncFn, useLocalStorage } from 'react-use'
 import axios from 'axios'
-import { format, formatISO } from 'date-fns'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
-import { Icon, Card, DateSelect } from '~/components'
+import { Icon, Card, RoundSelect } from '~/components'
 
 export const Dashboard = () => {
-  const [currentDate, setDate] = useState(formatISO(new Date(2022, 10, 20)))
+  const [currentRound, setRound] = useState('1')
   const [auth] = useLocalStorage('auth', {})
 
   const [{ value: user, loading, error }, fetchHunches] = useAsyncFn(async () => {
@@ -47,8 +48,8 @@ export const Dashboard = () => {
 
   useEffect(() => {
     fetchHunches()
-    fetchGames({ gameTime: currentDate })
-  }, [currentDate])
+    fetchGames({ rod: currentRound })
+  }, [currentRound])
 
 
   if (!auth?.user?.id) {
@@ -77,7 +78,7 @@ export const Dashboard = () => {
 
         <section id="content" className="container max-w-3xl py-4 px-2 sm:px-4 space-y-4">
 
-          <DateSelect currentDate={currentDate} onChange={setDate} />
+          <RoundSelect currentRound={currentRound} onChange={setRound} />
 
           <div className="space-y-4">
             {isLoading && <Icon name="spinnerTwo" className="w-10 h-10" />}
@@ -89,9 +90,14 @@ export const Dashboard = () => {
                 gameId={game.id}
                 homeTeam={game.homeTeam}
                 awayTeam={game.awayTeam}
+                group={game.grp}
+                rod={game.rod}
+                btn={true}
+                date={format(new Date(game.gameTime), "d 'de' MMMM", { locale: ptBR })}
                 gameTime={format(new Date(game.gameTime), 'HH:mm')}
-                homeTeamScore={user?.hunches?.[game.id]?.homeTeamScore || 0}
-                awayTeamScore={user?.hunches?.[game.id]?.awayTeamScore || 0}
+                homeTeamScore={user?.hunches?.[game.id]?.homeTeamScore == undefined ? '' : user?.hunches?.[game.id]?.homeTeamScore}
+                awayTeamScore={user?.hunches?.[game.id]?.awayTeamScore == undefined ? '' : user?.hunches?.[game.id]?.awayTeamScore}
+                disabled={game.rod >= 4 ? true : ''}
               />
             ))}
 
